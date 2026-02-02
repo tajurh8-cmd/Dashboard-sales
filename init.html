@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Init Firebase Structure</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+  <div class="container py-4" style="max-width:860px;">
+    <h3 class="mb-2">Init Firebase Structure</h3>
+    <div class="text-muted mb-3">
+      Ini akan membuat struktur Firestore otomatis.
+    </div>
+
+    <div class="card shadow-sm">
+      <div class="card-body">
+
+        <div class="alert alert-warning small">
+          Pastikan Firestore sudah dibuat + rules mengizinkan write.
+        </div>
+
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label">Config Doc ID</label>
+            <input id="docId" class="form-control" value="feb_2026">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Month</label>
+            <input id="month" class="form-control" value="2026-02">
+          </div>
+          <div class="col-md-4">
+            <label class="form-label">Target Net Sales</label>
+            <input id="targetNetSales" type="number" class="form-control" value="164403706">
+          </div>
+        </div>
+
+        <hr class="my-4">
+
+        <h5 class="mb-2">APC Target Bulanan</h5>
+        <div class="row g-3">
+          <div class="col-md-4">
+            <label class="form-label">Target APC (Rp)</label>
+            <input id="targetAPC" type="number" class="form-control" value="0">
+          </div>
+        </div>
+
+        <hr class="my-4">
+
+        <h5 class="mb-2">Bobot PPS (%)</h5>
+        <div class="row g-3">
+          <div class="col-md-3">
+            <label class="form-label">APC</label>
+            <input id="wApc" type="number" class="form-control" value="25">
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">PSM</label>
+            <input id="wPsm" type="number" class="form-control" value="20">
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">PWP</label>
+            <input id="wPwp" type="number" class="form-control" value="25">
+          </div>
+          <div class="col-md-3">
+            <label class="form-label">SERBA GRATIS</label>
+            <input id="wSg" type="number" class="form-control" value="30">
+          </div>
+        </div>
+
+        <hr class="my-4">
+
+        <div class="d-flex gap-2">
+          <button class="btn btn-primary w-50" onclick="init()">INIT FIREBASE STRUCTURE</button>
+          <a href="index.html" class="btn btn-outline-secondary w-50">Buka Dashboard</a>
+        </div>
+
+        <div id="msg" class="mt-3 small text-muted"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDwAQ1huvii-IJC6LT17CzH-Q6AawGgpOw",
+      authDomain: "numeric-nova-471404-c0.firebaseapp.com",
+      projectId: "numeric-nova-471404-c0",
+      storageBucket: "numeric-nova-471404-c0.firebasestorage.app",
+      messagingSenderId: "175787187573",
+      appId: "1:175787187573:web:ab48e4e3e259b60db0473c",
+      measurementId: "G-KHCC6MPNZM"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+    db.settings({ ignoreUndefinedProperties: true });
+
+    function show(t){ document.getElementById("msg").textContent = t; }
+
+    async function init(){
+      try{
+        show("Initializing...");
+
+        const docId = (document.getElementById("docId").value || "feb_2026").trim();
+        const month = (document.getElementById("month").value || "2026-02").trim();
+        const targetNetSales = Number(document.getElementById("targetNetSales").value || 0);
+        const targetAPC = Number(document.getElementById("targetAPC").value || 0);
+
+        const wApc = Number(document.getElementById("wApc").value || 0);
+        const wPsm = Number(document.getElementById("wPsm").value || 0);
+        const wPwp = Number(document.getElementById("wPwp").value || 0);
+        const wSg  = Number(document.getElementById("wSg").value || 0);
+
+        const totalW = wApc + wPsm + wPwp + wSg;
+        if(totalW !== 100) return show("❌ Total bobot harus 100. Sekarang: " + totalW);
+
+        const configDoc = {
+          month,
+          targetNetSales,
+
+          // APC monthly target
+          targetAPC,
+
+          // weights
+          ppsWeight: {
+            APC: wApc/100,
+            PSM: wPsm/100,
+            PWP: wPwp/100,
+            "SERBA GRATIS": wSg/100
+          },
+
+          // period targets (input weekly)
+          targetPeriod: {
+            PSM: { W1: 0, W2: 0, W3: 0, W4: 0 },
+            PWP: { W1: 0, W2: 0 },
+            "SERBA GRATIS": { W1: 0, W2: 0 }
+          },
+
+          updatedAt: Date.now()
+        };
+
+        await db.collection("config").doc(docId).set(configDoc, { merge:true });
+
+        show("✅ DONE. Struktur sudah dibuat: config/" + docId);
+      } catch(err){
+        console.error(err);
+        show("❌ ERROR: " + (err?.message || err));
+      }
+    }
+  </script>
+
+</body>
+</html>

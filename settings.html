@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Settings - Target</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+
+<div class="container py-4" style="max-width:980px;">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+      <h3 class="m-0">Settings Target</h3>
+      <div class="text-muted small">DocID otomatis = month (YYYY-MM)</div>
+    </div>
+
+    <div class="d-flex gap-2">
+      <a href="index.html" class="btn btn-outline-secondary">Dashboard</a>
+      <a href="input.html" class="btn btn-outline-secondary">Input</a>
+    </div>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <div class="alert alert-warning small">
+        Data disimpan ke: <b>Firestore → config/{YYYY-MM}</b>
+      </div>
+
+      <div class="row g-3">
+        <div class="col-md-4">
+          <label class="form-label">Month (YYYY-MM)</label>
+          <input id="month" class="form-control" placeholder="2026-03">
+          <div class="form-text">Contoh: 2026-02, 2026-03</div>
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Target Net Sales (Bulanan)</label>
+          <input id="targetNetSales" type="number" class="form-control">
+        </div>
+        <div class="col-md-4">
+          <label class="form-label">Target APC (Rp) Bulanan</label>
+          <input id="targetAPC" type="number" class="form-control">
+        </div>
+      </div>
+
+      <hr class="my-4">
+
+      <h5 class="mb-2">Target PSM (4 WEEK)</h5>
+      <div class="row g-3">
+        <div class="col-md-3"><label class="form-label">W1 (1-7)</label><input id="psmW1" type="number" class="form-control" value="0"></div>
+        <div class="col-md-3"><label class="form-label">W2 (8-15)</label><input id="psmW2" type="number" class="form-control" value="0"></div>
+        <div class="col-md-3"><label class="form-label">W3 (16-23)</label><input id="psmW3" type="number" class="form-control" value="0"></div>
+        <div class="col-md-3"><label class="form-label">W4 (24-EOM)</label><input id="psmW4" type="number" class="form-control" value="0"></div>
+      </div>
+
+      <hr class="my-4">
+
+      <h5 class="mb-2">Target PWP (2 WEEK)</h5>
+      <div class="row g-3">
+        <div class="col-md-3"><label class="form-label">W1 (1-15)</label><input id="pwpW1" type="number" class="form-control" value="0"></div>
+        <div class="col-md-3"><label class="form-label">W2 (16-EOM)</label><input id="pwpW2" type="number" class="form-control" value="0"></div>
+      </div>
+
+      <hr class="my-4">
+
+      <h5 class="mb-2">Target SERBA GRATIS (2 WEEK)</h5>
+      <div class="row g-3">
+        <div class="col-md-3"><label class="form-label">W1 (1-15)</label><input id="sgW1" type="number" class="form-control" value="0"></div>
+        <div class="col-md-3"><label class="form-label">W2 (16-EOM)</label><input id="sgW2" type="number" class="form-control" value="0"></div>
+      </div>
+
+      <hr class="my-4">
+
+      <h5 class="mb-2">Bobot PPS (%)</h5>
+      <div class="row g-3">
+        <div class="col-md-3"><label class="form-label">APC</label><input id="wApc" type="number" class="form-control" value="25"></div>
+        <div class="col-md-3"><label class="form-label">PSM</label><input id="wPsm" type="number" class="form-control" value="20"></div>
+        <div class="col-md-3"><label class="form-label">PWP</label><input id="wPwp" type="number" class="form-control" value="25"></div>
+        <div class="col-md-3"><label class="form-label">SERBA GRATIS</label><input id="wSg" type="number" class="form-control" value="30"></div>
+      </div>
+      <div class="form-text">Total bobot wajib 100</div>
+
+      <div class="d-flex gap-2 mt-4">
+        <button class="btn btn-primary w-50" onclick="save()">Save</button>
+        <button class="btn btn-outline-dark w-50" onclick="load()">Load</button>
+      </div>
+
+      <div id="msg" class="mt-3 small text-muted"></div>
+    </div>
+  </div>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyDwAQ1huvii-IJC6LT17CzH-Q6AawGgpOw",
+    authDomain: "numeric-nova-471404-c0.firebaseapp.com",
+    projectId: "numeric-nova-471404-c0",
+    storageBucket: "numeric-nova-471404-c0.firebasestorage.app",
+    messagingSenderId: "175787187573",
+    appId: "1:175787187573:web:ab48e4e3e259b60db0473c",
+    measurementId: "G-KHCC6MPNZM"
+  };
+
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+  db.settings({ ignoreUndefinedProperties: true });
+
+  const show = (t)=>document.getElementById("msg").textContent=t;
+  const num = (id)=>Number(document.getElementById(id).value||0);
+  const setv = (id,v)=>document.getElementById(id).value=v;
+
+  function docId(){
+    return (document.getElementById("month").value||"").trim();
+  }
+
+  // default month = current month
+  (function initDefaultMonth(){
+    const d = new Date();
+    const m = String(d.getMonth()+1).padStart(2,"0");
+    const y = d.getFullYear();
+    document.getElementById("month").value = `${y}-${m}`;
+  })();
+
+  async function load(){
+    const id = docId();
+    if(!id) return show("❌ month wajib (YYYY-MM)");
+    show("Loading...");
+
+    const snap = await db.collection("config").doc(id).get();
+    if(!snap.exists){ show("❌ config/"+id+" belum ada"); return; }
+
+    const cfg = snap.data();
+
+    setv("targetNetSales", Number(cfg.targetNetSales||0));
+    setv("targetAPC", Number(cfg.targetAPC||0));
+
+    const tp = cfg.targetPeriod||{};
+    const psm = tp.PSM||{};
+    const pwp = tp.PWP||{};
+    const sg  = tp["SERBA GRATIS"]||{};
+
+    setv("psmW1", Number(psm.W1||0)); setv("psmW2", Number(psm.W2||0));
+    setv("psmW3", Number(psm.W3||0)); setv("psmW4", Number(psm.W4||0));
+
+    setv("pwpW1", Number(pwp.W1||0)); setv("pwpW2", Number(pwp.W2||0));
+    setv("sgW1", Number(sg.W1||0));   setv("sgW2", Number(sg.W2||0));
+
+    const w = cfg.ppsWeight || { APC:0.25, PSM:0.20, PWP:0.25, "SERBA GRATIS":0.30 };
+    setv("wApc", Number(w.APC||0)*100);
+    setv("wPsm", Number(w.PSM||0)*100);
+    setv("wPwp", Number(w.PWP||0)*100);
+    setv("wSg",  Number(w["SERBA GRATIS"]||0)*100);
+
+    show("✅ Loaded");
+    setTimeout(()=>show(""),1200);
+  }
+
+  async function save(){
+    const id = docId();
+    if(!id) return show("❌ month wajib (YYYY-MM)");
+
+    const wApc=num("wApc"), wPsm=num("wPsm"), wPwp=num("wPwp"), wSg=num("wSg");
+    const totalW = wApc+wPsm+wPwp+wSg;
+    if(totalW !== 100) return show("❌ Total bobot harus 100 (sekarang "+totalW+")");
+
+    show("Saving...");
+
+    await db.collection("config").doc(id).set({
+      month: id,
+      targetNetSales: num("targetNetSales"),
+      targetAPC: num("targetAPC"),
+      targetPeriod: {
+        PSM: { W1:num("psmW1"), W2:num("psmW2"), W3:num("psmW3"), W4:num("psmW4") },
+        PWP: { W1:num("pwpW1"), W2:num("pwpW2") },
+        "SERBA GRATIS": { W1:num("sgW1"), W2:num("sgW2") }
+      },
+      ppsWeight: {
+        APC: wApc/100,
+        PSM: wPsm/100,
+        PWP: wPwp/100,
+        "SERBA GRATIS": wSg/100
+      },
+      updatedAt: Date.now()
+    }, { merge:true });
+
+    show("✅ Saved to config/"+id);
+    setTimeout(()=>show(""),1200);
+  }
+</script>
+
+</body>
+</html>
