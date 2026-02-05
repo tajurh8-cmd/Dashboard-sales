@@ -247,6 +247,37 @@ body{
     border-radius:14px;
   }
 }
+@media (max-width:576px){
+
+  .action-bar{
+    display:grid;
+    grid-template-columns:48px 1fr;
+    gap:10px;
+    width:100%;
+    margin-top:8px;
+  }
+
+  .btn-settings{
+    width:48px;
+    height:48px;
+    padding:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:20px;
+    border-radius:12px;
+  }
+
+  .btn-input{
+    width:100%;
+    padding:14px;
+    font-size:15px;
+    font-weight:800;
+    border-radius:14px;
+  }
+}
+
+
 
 
 
