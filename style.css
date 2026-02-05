@@ -1,0 +1,142 @@
+/* ================= ROOT ================= */
+:root{
+  --alfa-red:#D71920;
+  --alfa-red-2:#B9151A;
+  --alfa-yellow:#FFD200;
+  --alfa-bg:#fff7f7;
+}
+
+/* ================= BASE ================= */
+body{
+  background:var(--alfa-bg);
+  font-size:14px;
+}
+
+.container{
+  padding-left:12px;
+  padding-right:12px;
+}
+
+.card{
+  border:0;
+  border-radius:14px;
+  box-shadow:0 6px 14px rgba(0,0,0,.06);
+}
+
+/* ================= BUTTON ================= */
+.btn-primary{
+  background:var(--alfa-red);
+  border-color:var(--alfa-red);
+}
+
+.btn-outline-dark{
+  border-color:var(--alfa-red);
+  color:var(--alfa-red);
+}
+
+.btn-outline-dark:hover{
+  background:var(--alfa-red);
+  color:#fff;
+}
+
+/* ================= HEADER ================= */
+.alfa-topbar{
+  background:linear-gradient(90deg,var(--alfa-red),var(--alfa-red-2));
+  border-bottom:4px solid var(--alfa-yellow);
+  border-radius:14px;
+  padding:8px 12px;      /* RINGKAS */
+  color:#fff;
+  width:100%;
+  display:flex;
+}
+
+.alfa-title{
+  font-weight:800;
+  font-size:18px;
+  line-height:1.2;
+}
+
+/* ================= FORM ================= */
+.form-control,
+.form-select{
+  border-radius:10px;
+}
+
+/* ================= PROGRESS ================= */
+.progress{
+  height:10px;
+  border-radius:999px;
+  background:#eee;
+}
+
+.progress-bar{
+  border-radius:999px;
+}
+
+/* ================= TABLE ================= */
+.table{
+  font-size:13px;
+}
+
+.table td,
+.table th{
+  white-space:nowrap;
+}
+
+/* ================= MOBILE ================= */
+@media (max-width:576px){
+
+  body{
+    font-size:13px;
+  }
+
+  .container{
+    max-width:100% !important;
+    padding-left:10px;
+    padding-right:10px;
+  }
+
+  /* HEADER */
+  .alfa-topbar{
+    flex-direction:column;
+    align-items:flex-start;
+    gap:6px;
+    padding:8px;
+  }
+
+  .alfa-topbar img{
+    height:32px;
+    padding:4px;
+    background:#fff;
+    border-radius:8px;
+  }
+
+  .alfa-title{
+    font-size:15px;
+  }
+
+  #monthSelect{
+    width:100% !important;
+    margin-top:4px;
+  }
+
+  .alfa-topbar .d-flex.gap-2{
+    width:100%;
+    flex-direction:column;
+  }
+
+  .alfa-topbar .btn{
+    width:100%;
+  }
+
+  /* GRID */
+  .row.g-3 > [class*="col-"]{
+    flex:0 0 100%;
+    max-width:100%;
+  }
+
+  /* TABLE */
+  .table-responsive{
+    margin:0 -8px;
+  }
+}
