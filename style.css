@@ -19,35 +19,31 @@ body{
 
 .card{
   border:0;
-  border-radius:14px;
+  border-radius:16px;
   box-shadow:0 6px 14px rgba(0,0,0,.06);
 }
 
 /* ================= BUTTON ================= */
 .btn-primary{
-  background:var(--alfa-red);
-  border-color:var(--alfa-red);
+  background:var(--alfa-yellow) !important;
+  color:#000 !important;
+  border:none;
+  font-weight:800;
 }
 
-.btn-outline-dark{
-  border-color:var(--alfa-red);
-  color:var(--alfa-red);
-}
-
-.btn-outline-dark:hover{
-  background:var(--alfa-red);
-  color:#fff;
+.btn-light{
+  background:#fff;
+  border:1px solid #ddd;
 }
 
 /* ================= HEADER ================= */
 .alfa-topbar{
   background:linear-gradient(90deg,var(--alfa-red),var(--alfa-red-2));
   border-bottom:4px solid var(--alfa-yellow);
-  border-radius:14px;
-  padding:8px 12px;      /* RINGKAS */
+  border-radius:18px;
+  padding:12px;
   color:#fff;
   width:100%;
-  display:flex;
 }
 
 .alfa-title{
@@ -59,7 +55,7 @@ body{
 /* ================= FORM ================= */
 .form-control,
 .form-select{
-  border-radius:10px;
+  border-radius:12px;
 }
 
 /* ================= PROGRESS ================= */
@@ -83,6 +79,17 @@ body{
   white-space:nowrap;
 }
 
+/* ================= CTA PULSE ================= */
+.alfa-topbar .btn-primary{
+  animation:pulseCTA 1.8s infinite;
+}
+
+@keyframes pulseCTA{
+  0%{ box-shadow:0 0 0 0 rgba(255,210,0,.6); }
+  70%{ box-shadow:0 0 0 14px rgba(255,210,0,0); }
+  100%{ box-shadow:0 0 0 0 rgba(255,210,0,0); }
+}
+
 /* ================= MOBILE ================= */
 @media (max-width:576px){
 
@@ -98,10 +105,7 @@ body{
 
   /* HEADER */
   .alfa-topbar{
-    flex-direction:column;
-    align-items:flex-start;
-    gap:6px;
-    padding:8px;
+    padding:12px;
   }
 
   .alfa-topbar img{
@@ -112,21 +116,52 @@ body{
   }
 
   .alfa-title{
-    font-size:15px;
+    font-size:16px;
   }
 
   #monthSelect{
     width:100% !important;
-    margin-top:4px;
+    margin-bottom:10px;
   }
 
-  .alfa-topbar .d-flex.gap-2{
+  /* ACTION BAR */
+  .action-bar{
+    display:flex;
+    align-items:center;
+    gap:10px;
     width:100%;
-    flex-direction:column;
   }
 
-  .alfa-topbar .btn{
-    width:100%;
+  /* SETTINGS ICON ONLY */
+  .btn-settings{
+    width:48px;
+    height:48px;
+    min-width:48px;
+    padding:0 !important;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    border-radius:12px;
+    overflow:hidden;
+  }
+
+  .btn-settings *{
+    display:none;
+  }
+
+  .btn-settings::before{
+    content:"⚙";
+    font-size:22px;
+    line-height:1;
+  }
+
+  /* INPUT BUTTON */
+  .btn-input{
+    flex:1;
+    padding:14px;
+    font-size:15px;
+    font-weight:800;
+    border-radius:14px;
   }
 
   /* GRID */
@@ -140,122 +175,3 @@ body{
     margin:0 -8px;
   }
 }
-/* ===== CTA PULSE INPUT HARIAN ===== */
-.alfa-topbar .btn-primary{
-  background:#FFD200 !important;   /* kuning Alfamart */
-  color:#000 !important;
-  font-weight:700;
-  border:none;
-  box-shadow:0 0 0 rgba(255,210,0,.6);
-  animation:pulseCTA 1.8s infinite;
-}
-
-/* animasi denyut */
-@keyframes pulseCTA{
-  0%{
-    box-shadow:0 0 0 0 rgba(255,210,0,.7);
-  }
-  70%{
-    box-shadow:0 0 0 14px rgba(255,210,0,0);
-  }
-  100%{
-    box-shadow:0 0 0 0 rgba(255,210,0,0);
-  }
-}
-
-/* Mobile lebih tegas */
-@media (max-width:576px){
-  .alfa-topbar .btn-primary{
-    font-size:16px;
-    padding:14px;
-  }
-}
-/* ===== MOBILE: SETTINGS & INPUT 60:40 ===== */
-@media (max-width:576px){
-
-  .alfa-topbar .d-flex.gap-2{
-    flex-direction:row !important;
-    gap:10px;
-  }
-
-  /* Settings = 40% */
-  .alfa-topbar .btn:not(.btn-primary){
-    width:40%;
-    padding:14px 8px;
-    font-size:13px;
-  }
-
-  /* Input Harian = 60% (utama) */
-  .alfa-topbar .btn-primary{
-    width:60%;
-    padding:14px 10px;
-    font-size:15px;
-    font-weight:800;
-  }
-}
-/* ===== MOBILE: SETTINGS ICON ONLY ===== */
-@media (max-width:576px){
-
-  .alfa-topbar .d-flex.gap-2{
-    flex-direction:row !important;
-    gap:10px;
-    align-items:center;
-  }
-
-  /* SETTINGS: ikon saja */
-  .alfa-topbar .btn:not(.btn-primary){
-    width:48px;
-    height:48px;
-    padding:0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:20px;       /* ukuran ikon ⚙️ */
-    border-radius:12px;
-  }
-
-  /* sembunyikan teks "Settings", ikon tetap */
-  .alfa-topbar .btn:not(.btn-primary) span,
-  .alfa-topbar .btn:not(.btn-primary) .text{
-    display:none;
-  }
-
-  /* INPUT: tombol utama */
-  .alfa-topbar .btn-primary{
-    flex:1;
-    padding:14px;
-    font-size:15px;
-    font-weight:800;
-  }
-}
-/* ===== MOBILE ACTION BAR ===== */
-@media (max-width:576px){
-
-  .action-bar{
-    width:100%;
-  }
-
-  .btn-settings{
-    width:48px;
-    height:48px;
-    padding:0;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:20px;
-    border-radius:12px;
-  }
-
-  .btn-input{
-    flex:1;
-    padding:14px;
-    font-size:15px;
-    font-weight:800;
-  }
-}
-
-
-
-
-
-
