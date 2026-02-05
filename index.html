@@ -1,116 +1,205 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Dashboard Monitoring IKT & PPS</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+<div class="container py-3">
+
+  <!-- HEADER -->
+  <div class="alfa-topbar mb-3">
+    <div class="d-flex align-items-center gap-3 mb-2">
+      <img src="alfamart-logo.png" style="height:36px;background:#fff;border-radius:8px;padding:4px;">
+      <div>
+        <div class="alfa-title">Dashboard Monitoring IKT & PPS</div>
+        <div class="small opacity-75">SAT TAJURHALANG | BI33</div>
+      </div>
+    </div>
+
+    <select id="monthSelect" class="form-select mb-2" onchange="loadDashboard()"></select>
+
+    <div class="d-flex gap-2 action-bar">
+      <a href="settings.html" class="btn btn-light btn-settings">⚙</a>
+      <a href="input.html" class="btn btn-primary btn-input">+ Input Harian</a>
+    </div>
+  </div>
+
+  <!-- KPI -->
+  <div class="row g-3 mb-3">
+    <div class="col-md-3">
+      <div class="card"><div class="card-body">
+        <div class="text-muted small">Net Sales Ach%</div>
+        <div class="fs-3 fw-bold" id="cardSalesAch">-</div>
+        <div class="small">Target: <b id="cardSalesTarget">-</b><br>Actual: <b id="cardSalesActual">-</b></div>
+        <div class="progress mt-2"><div class="progress-bar" id="barSales"></div></div>
+      </div></div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card"><div class="card-body">
+        <div class="text-muted small">APC AVG Ach%</div>
+        <div class="fs-3 fw-bold" id="cardApcAch">-</div>
+        <div class="small">Target: <b id="cardApcTarget">-</b><br>Avg: <b id="cardApcActual">-</b></div>
+        <div class="progress mt-2"><div class="progress-bar" id="barApc"></div></div>
+      </div></div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card"><div class="card-body">
+        <div class="text-muted small">PPS Score</div>
+        <div class="d-flex justify-content-between">
+          <div class="fs-3 fw-bold" id="cardPpsScore">-</div>
+          <span class="badge" id="cardPpsStatus">-</span>
+        </div>
+        <div class="progress mt-2"><div class="progress-bar" id="barPps"></div></div>
+      </div></div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card"><div class="card-body small">
+        <div class="text-muted">GAP to Target</div>
+        Net Sales: <b id="gapSales">-</b><br>
+        PSM: <b id="gapPsm">-</b><br>
+        PWP: <b id="gapPwp">-</b><br>
+        SG: <b id="gapSg">-</b>
+      </div></div>
+    </div>
+  </div>
+
+  <!-- TRACKER -->
+  <div class="row g-3">
+    <div class="col-md-6">
+      <div class="card"><div class="card-body">
+        <div class="fw-semibold mb-2">PSM (4 WEEK)</div>
+        <div id="psmTracker" class="d-grid gap-2"></div>
+      </div></div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card mb-3"><div class="card-body">
+        <div class="fw-semibold mb-2">PWP (2 WEEK)</div>
+        <div id="pwpTracker" class="d-grid gap-2"></div>
+      </div></div>
+
+      <div class="card"><div class="card-body">
+        <div class="fw-semibold mb-2">SERBA GRATIS (2 WEEK)</div>
+        <div id="sgTracker" class="d-grid gap-2"></div>
+      </div></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- FIREBASE -->
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
 <script>
-async function loadDashboard(){
-  const month = document.getElementById("monthSelect").value;
-  if(!month) return;
+/* ===== FIREBASE ===== */
+firebase.initializeApp({
+  apiKey:"AIzaSyDwAQ1huvii-IJC6LT17CzH-Q6AawGgpOw",
+  authDomain:"numeric-nova-471404-c0.firebaseapp.com",
+  projectId:"numeric-nova-471404-c0"
+});
+const db=firebase.firestore();
 
-  const cfgSnap = await db.collection("config").doc(month).get();
-  if(!cfgSnap.exists) return;
+/* ===== HELPERS ===== */
+const num=v=>Number(v||0);
+const rupiah=n=>new Intl.NumberFormat("id-ID").format(Math.round(n||0));
+const pct=x=>(x*100).toFixed(1)+"%";
+const clamp=x=>Math.max(0,Math.min(1,x));
 
-  const cfg = cfgSnap.data();
-  const [Y,M] = month.split("-").map(Number);
-  const eom = new Date(Y,M,0).getDate();
-
-  const salesSnap = await db.collection("daily_sales").orderBy("date").get();
-  const ppsSnap   = await db.collection("pps_daily").orderBy("date").get();
-
-  const sales = salesSnap.docs.map(d=>d.data()).filter(r=>r.date.startsWith(month));
-  const pps   = ppsSnap.docs.map(d=>d.data()).filter(r=>r.date.startsWith(month));
-
-  /* ===== SALES ===== */
-  const actualSales = sales.reduce((a,r)=>a+num(r.netSales),0);
-  const salesAch = cfg.targetNetSales ? actualSales/cfg.targetNetSales : 0;
-
-  cardSalesTarget.textContent = rupiah(cfg.targetNetSales);
-  cardSalesActual.textContent = rupiah(actualSales);
-  cardSalesAch.textContent    = pct(salesAch);
-  setBar("barSales", salesAch);
-
-  /* ===== APC ===== */
-  const apcAvg = pps.reduce((a,r)=>a+num(r.APC),0) / (pps.length||1);
-  const apcAch = cfg.targetAPC ? apcAvg/cfg.targetAPC : 0;
-
-  cardApcTarget.textContent = rupiah(cfg.targetAPC);
-  cardApcActual.textContent = rupiah(apcAvg);
-  cardApcAch.textContent    = pct(apcAch);
-  setBar("barApc", apcAch);
-
-  /* ===== HELPER ===== */
-  const sum = (field,s,e)=>
-    pps.reduce((a,r)=>{
-      const d=new Date(r.date+"T00:00:00");
-      return (d.getMonth()+1===M && d.getDate()>=s && d.getDate()<=e)
-        ? a+num(r[field]) : a;
-    },0);
-
-  /* ===== ACTUAL ===== */
-  const PSM = [
-    sum("PSM",1,7),
-    sum("PSM",8,15),
-    sum("PSM",16,23),
-    sum("PSM",24,eom)
-  ];
-
-  const PWP = [
-    sum("PWP",1,15),
-    sum("PWP",16,eom)
-  ];
-
-  const SG = [
-    sum("SERBA GRATIS",1,15),
-    sum("SERBA GRATIS",16,eom)
-  ];
-
-  /* ===== TARGET ===== */
-  const tp = cfg.targetPeriod || {};
-  const tPSM = tp.PSM || {};
-  const tPWP = tp.PWP || {};
-  const tSG  = tp["SERBA GRATIS"] || {};
-
-  const psmTarget = num(tPSM.W1)+num(tPSM.W2)+num(tPSM.W3)+num(tPSM.W4);
-  const pwpTarget = num(tPWP.W1)+num(tPWP.W2);
-  const sgTarget  = num(tSG.W1)+num(tSG.W2);
-
-  const psmActual = PSM.reduce((a,b)=>a+b,0);
-  const pwpActual = PWP.reduce((a,b)=>a+b,0);
-  const sgActual  = SG.reduce((a,b)=>a+b,0);
-
-  /* ===== TRACKER ===== */
-  renderTracker("psmTracker",[
-    {label:"PSM W1",range:"(1-7)", actual:PSM[0], target:num(tPSM.W1)},
-    {label:"PSM W2",range:"(8-15)",actual:PSM[1], target:num(tPSM.W2)},
-    {label:"PSM W3",range:"(16-23)",actual:PSM[2], target:num(tPSM.W3)},
-    {label:"PSM W4",range:`(24-${eom})`,actual:PSM[3], target:num(tPSM.W4)}
-  ]);
-
-  renderTracker("pwpTracker",[
-    {label:"PWP W1",range:"(1-15)", actual:PWP[0], target:num(tPWP.W1)},
-    {label:"PWP W2",range:`(16-${eom})`, actual:PWP[1], target:num(tPWP.W2)}
-  ]);
-
-  renderTracker("sgTracker",[
-    {label:"SG W1",range:"(1-15)", actual:SG[0], target:num(tSG.W1)},
-    {label:"SG W2",range:`(16-${eom})`, actual:SG[1], target:num(tSG.W2)}
-  ]);
-
-  /* ===== PPS SCORE ===== */
-  const W = cfg.ppsWeight || {APC:.25,PSM:.2,PWP:.25,"SERBA GRATIS":.3};
-
-  const score =
-    clamp(apcAch) * num(W.APC) +
-    clamp(psmActual/psmTarget||0) * num(W.PSM) +
-    clamp(pwpActual/pwpTarget||0) * num(W.PWP) +
-    clamp(sgActual/sgTarget||0)   * num(W["SERBA GRATIS"]);
-
-  cardPpsScore.textContent = pct(score);
-  const st = status(score);
-  cardPpsStatus.textContent = st.t;
-  cardPpsStatus.className = "badge "+st.c;
-  setBar("barPps", score);
-
-  /* ===== GAP ===== */
-  gapSales.textContent = rupiah(cfg.targetNetSales-actualSales);
-  gapPsm.textContent   = psmTarget-psmActual;
-  gapPwp.textContent   = pwpTarget-pwpActual;
-  gapSg.textContent    = sgTarget-sgActual;
+function status(a){
+  if(a>=1) return {t:"ON TRACK",c:"bg-success"};
+  if(a>=0.9) return {t:"WARNING",c:"bg-warning text-dark"};
+  return {t:"DANGER",c:"bg-danger"};
 }
+
+function setBar(id,a){
+  const el=document.getElementById(id);
+  el.style.width=Math.min(a*100,150)+"%";
+  el.className="progress-bar "+status(a).c;
+}
+
+function renderTracker(id,items){
+  const el=document.getElementById(id);
+  el.innerHTML="";
+  items.forEach(it=>{
+    const ach=it.target?it.actual/it.target:0;
+    el.innerHTML+=`
+      <div>
+        <div class="d-flex justify-content-between small">
+          <div>${it.label} ${it.range}</div>
+          <div>${it.actual}/${it.target} <span class="badge ${status(ach).c}">${pct(ach)}</span></div>
+        </div>
+        <div class="progress"><div class="progress-bar ${status(ach).c}" style="width:${Math.min(ach*100,150)}%"></div></div>
+      </div>`;
+  });
+}
+
+/* ===== MONTH ===== */
+function currentMonth(){
+  const d=new Date();
+  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
+}
+
+async function loadMonthList(){
+  const sel=document.getElementById("monthSelect");
+  sel.innerHTML="";
+  const snap=await db.collection("config").orderBy("month","desc").get();
+  const months=snap.docs.map(d=>d.id);
+  (months.length?months:[currentMonth()]).forEach(m=>{
+    const o=document.createElement("option");
+    o.value=m;o.textContent=m;sel.appendChild(o);
+  });
+  sel.value=months.includes(currentMonth())?currentMonth():months[0];
+}
+
+/* ===== DASHBOARD ===== */
+async function loadDashboard(){
+  const month=monthSelect.value;
+  const cfg=(await db.collection("config").doc(month).get()).data();
+  if(!cfg) return;
+
+  const sales=(await db.collection("daily_sales").get()).docs.map(d=>d.data()).filter(r=>r.date.startsWith(month));
+  const pps=(await db.collection("pps_daily").get()).docs.map(d=>d.data()).filter(r=>r.date.startsWith(month));
+
+  const actualSales=sales.reduce((a,r)=>a+num(r.netSales),0);
+  const salesAch=cfg.targetNetSales?actualSales/cfg.targetNetSales:0;
+
+  cardSalesTarget.textContent=rupiah(cfg.targetNetSales);
+  cardSalesActual.textContent=rupiah(actualSales);
+  cardSalesAch.textContent=pct(salesAch);
+  setBar("barSales",salesAch);
+
+  const apcAvg=pps.reduce((a,r)=>a+num(r.APC),0)/(pps.length||1);
+  const apcAch=cfg.targetAPC?apcAvg/cfg.targetAPC:0;
+
+  cardApcTarget.textContent=rupiah(cfg.targetAPC);
+  cardApcActual.textContent=rupiah(apcAvg);
+  cardApcAch.textContent=pct(apcAch);
+  setBar("barApc",apcAch);
+
+  const score=clamp(apcAch);
+  cardPpsScore.textContent=pct(score);
+  const st=status(score);
+  cardPpsStatus.textContent=st.t;
+  cardPpsStatus.className="badge "+st.c;
+  setBar("barPps",score);
+}
+
+(async()=>{
+  await loadMonthList();
+  await loadDashboard();
+})();
 </script>
+
+</body>
+</html>
