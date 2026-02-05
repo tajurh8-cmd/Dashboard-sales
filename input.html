@@ -8,110 +8,219 @@
 </head>
 <body class="bg-light">
 
-  <div class="container py-4" style="max-width:760px;">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-      <h3 class="m-0">Input Harian</h3>
-      <a href="index.html" class="btn btn-outline-secondary">Dashboard</a>
-    </div>
+<div class="container py-4" style="max-width:900px;">
 
-    <div class="card shadow-sm">
-      <div class="card-body">
+  <!-- HEADER -->
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="m-0">Input Harian</h4>
+    <a href="index.html" class="btn btn-outline-secondary btn-sm">Dashboard</a>
+  </div>
 
-        <div class="mb-3">
+  <!-- FORM -->
+  <div class="card mb-4">
+    <div class="card-body">
+      <div class="row g-3">
+        <div class="col-md-4">
           <label class="form-label">Tanggal</label>
-          <input id="date" type="date" class="form-control">
+          <input type="date" id="date" class="form-control">
         </div>
 
-        <div class="mb-3">
+        <div class="col-md-8">
           <label class="form-label">Net Sales</label>
-          <input id="netSales" type="number" class="form-control" placeholder="contoh: 5000000">
+          <input type="number" id="netSales" class="form-control" placeholder="contoh: 500000">
         </div>
 
-        <div class="row g-3">
-          <div class="col-md-3">
-            <label class="form-label">APC</label>
-            <input id="apc" type="number" class="form-control" value="0">
-          </div>
-          <div class="col-md-3">
-            <label class="form-label">PSM</label>
-            <input id="psm" type="number" class="form-control" value="0">
-          </div>
-          <div class="col-md-3">
-            <label class="form-label">PWP</label>
-            <input id="pwp" type="number" class="form-control" value="0">
-          </div>
-          <div class="col-md-3">
-            <label class="form-label">SERBA GRATIS</label>
-            <input id="serbaGratis" type="number" class="form-control" value="0">
-          </div>
+        <div class="col-md-3">
+          <label class="form-label">APC (Rp)</label>
+          <input type="number" id="apc" class="form-control" value="0">
         </div>
 
-        <button id="btnSave" class="btn btn-primary mt-4 w-100" onclick="save()">Simpan</button>
-        <div id="msg" class="mt-3 small text-muted"></div>
+        <div class="col-md-3">
+          <label class="form-label">PSM</label>
+          <input type="number" id="psm" class="form-control" value="0">
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label">PWP</label>
+          <input type="number" id="pwp" class="form-control" value="0">
+        </div>
+
+        <div class="col-md-3">
+          <label class="form-label">SERBA GRATIS</label>
+          <input type="number" id="sg" class="form-control" value="0">
+        </div>
+      </div>
+
+      <button class="btn btn-primary w-100 mt-3" onclick="save()">Simpan</button>
+      <div id="msg" class="small text-muted mt-2"></div>
+    </div>
+  </div>
+
+  <!-- TABLE DATA -->
+  <div class="card">
+    <div class="card-body">
+      <div class="fw-semibold mb-2">Data Tersimpan (Bulan Aktif)</div>
+
+      <div class="table-responsive">
+        <table class="table table-sm table-striped align-middle">
+          <thead class="table-light">
+            <tr>
+              <th>Tanggal</th>
+              <th>Sales</th>
+              <th>APC</th>
+              <th>PSM</th>
+              <th>PWP</th>
+              <th>SG</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody id="dataTable">
+            <tr><td colspan="7" class="text-muted text-center">Belum ada data</td></tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
 
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+</div>
 
-  <script>
-    const firebaseConfig = {
-      apiKey: "AIzaSyDwAQ1huvii-IJC6LT17CzH-Q6AawGgpOw",
-      authDomain: "numeric-nova-471404-c0.firebaseapp.com",
-      projectId: "numeric-nova-471404-c0",
-      storageBucket: "numeric-nova-471404-c0.firebasestorage.app",
-      messagingSenderId: "175787187573",
-      appId: "1:175787187573:web:ab48e4e3e259b60db0473c",
-      measurementId: "G-KHCC6MPNZM"
-    };
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
-    firebase.initializeApp(firebaseConfig);
-    const db = firebase.firestore();
-    db.settings({ ignoreUndefinedProperties: true });
+<script>
+/* ================= FIREBASE ================= */
+const firebaseConfig = {
+  apiKey: "AIzaSyDwAQ1huvii-IJC6LT17CzH-Q6AawGgpOw",
+  authDomain: "numeric-nova-471404-c0.firebaseapp.com",
+  projectId: "numeric-nova-471404-c0",
+  storageBucket: "numeric-nova-471404-c0.firebasestorage.app",
+  messagingSenderId: "175787187573",
+  appId: "1:175787187573:web:ab48e4e3e259b60db0473c"
+};
 
-    function show(text){ document.getElementById("msg").textContent = text; }
-    function lock(isLock){ document.getElementById("btnSave").disabled = isLock; }
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+db.settings({ ignoreUndefinedProperties: true });
 
-    async function save(){
-      const date = document.getElementById("date").value;
-      const netSales = Number(document.getElementById("netSales").value || 0);
+/* ================= HELPERS ================= */
+const $ = id => document.getElementById(id);
+const num = v => Number(v || 0);
 
-      const apc = Number(document.getElementById("apc").value || 0);
-      const psm = Number(document.getElementById("psm").value || 0);
-      const pwp = Number(document.getElementById("pwp").value || 0);
-      const serbaGratis = Number(document.getElementById("serbaGratis").value || 0);
+function show(msg){
+  $("msg").textContent = msg;
+  setTimeout(()=>$("msg").textContent="", 1500);
+}
 
-      if(!date) return show("❌ Tanggal wajib diisi");
+function getMonth(dateStr){
+  return dateStr.slice(0,7); // YYYY-MM
+}
 
-      try{
-        lock(true);
-        show("Saving...");
+/* ================= SAVE ================= */
+async function save(){
+  const date = $("date").value;
+  if(!date) return show("❌ Tanggal wajib");
 
-        await db.collection("daily_sales").doc(date).set({
-          date,
-          netSales,
-          updatedAt: Date.now()
-        }, { merge:true });
+  const data = {
+    date,
+    netSales: num($("netSales").value),
+    APC: num($("apc").value),
+    PSM: num($("psm").value),
+    PWP: num($("pwp").value),
+    "SERBA GRATIS": num($("sg").value),
+    updatedAt: Date.now()
+  };
 
-        await db.collection("pps_daily").doc(date).set({
-          date,
-          APC: apc,
-          PSM: psm,
-          PWP: pwp,
-          "SERBA GRATIS": serbaGratis,
-          updatedAt: Date.now()
-        }, { merge:true });
+  await db.collection("pps_daily").doc(date).set(data, { merge:true });
+  show("✅ Data disimpan / diupdate");
 
-        show("✅ Berhasil disimpan");
-      } catch(err){
-        console.error("SAVE ERROR:", err);
-        show("❌ Gagal simpan: " + (err?.message || err));
-      } finally {
-        lock(false);
-      }
-    }
-  </script>
+  loadTable();
+}
+
+/* ================= LOAD TABLE ================= */
+
+async function loadTable(){
+  const dateVal = $("date").value;
+  const month = dateVal ? dateVal.slice(0,7) : new Date().toISOString().slice(0,7);
+
+  // ambil PPS
+  const ppsSnap = await db.collection("pps_daily").orderBy("date","desc").get();
+  const ppsMap = {};
+  ppsSnap.docs.forEach(d=>{
+    const r = d.data();
+    if(r.date.startsWith(month)) ppsMap[r.date] = r;
+  });
+
+  // ambil SALES
+  const salesSnap = await db.collection("daily_sales").orderBy("date","desc").get();
+  const salesMap = {};
+  salesSnap.docs.forEach(d=>{
+    const r = d.data();
+    if(r.date.startsWith(month)) salesMap[r.date] = r;
+  });
+
+  // gabungkan by date
+  const dates = Array.from(new Set([
+    ...Object.keys(ppsMap),
+    ...Object.keys(salesMap)
+  ])).sort().reverse();
+
+  const tbody = $("dataTable");
+  tbody.innerHTML = "";
+
+  if(dates.length === 0){
+    tbody.innerHTML = `<tr><td colspan="7" class="text-muted text-center">Belum ada data</td></tr>`;
+    return;
+  }
+
+  dates.forEach(date=>{
+    const p = ppsMap[date] || {};
+    const s = salesMap[date] || {};
+
+    const tr = document.createElement("tr");
+    tr.innerHTML = `
+      <td>${date}</td>
+      <td>${(s.netSales||0).toLocaleString("id-ID")}</td>
+      <td>${p.APC||0}</td>
+      <td>${p.PSM||0}</td>
+      <td>${p.PWP||0}</td>
+      <td>${p["SERBA GRATIS"]||0}</td>
+      <td>
+        <button class="btn btn-sm btn-outline-primary"
+          onclick='edit(${JSON.stringify({
+            date,
+            netSales: s.netSales||0,
+            APC: p.APC||0,
+            PSM: p.PSM||0,
+            PWP: p.PWP||0,
+            SG: p["SERBA GRATIS"]||0
+          })})'>
+          Edit
+        </button>
+      </td>
+    `;
+    tbody.appendChild(tr);
+  });
+}
+
+
+/* ================= EDIT ================= */
+function edit(r){
+  $("date").value = r.date;
+  $("netSales").value = r.netSales||0;
+  $("apc").value = r.APC||0;
+  $("psm").value = r.PSM||0;
+  $("pwp").value = r.PWP||0;
+  $("sg").value = r.SG||0;
+
+  show("✏️ Mode edit (Sales + PPS)");
+}
+
+/* ================= INIT ================= */
+(function init(){
+  $("date").value = new Date().toISOString().slice(0,10);
+  loadTable();
+})();
+</script>
 
 </body>
 </html>
