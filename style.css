@@ -170,3 +170,36 @@ body{
     padding:14px;
   }
 }
+/* ===== MOBILE FINAL ACTION BAR FIX ===== */
+@media (max-width:576px){
+
+  /* area tombol jadi 1 baris */
+  .alfa-topbar .d-flex.gap-2{
+    display:grid !important;
+    grid-template-columns:48px 1fr;
+    gap:10px;
+    width:100%;
+  }
+
+  /* SETTINGS = ICON ONLY */
+  .alfa-topbar .btn-outline-dark{
+    width:48px !important;
+    height:48px !important;
+    padding:0 !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    font-size:20px !important;
+    white-space:nowrap;
+  }
+
+  /* INPUT = TOMBOL UTAMA */
+  .alfa-topbar .btn-primary{
+    width:100% !important;
+    padding:14px !important;
+    font-size:16px !important;
+    font-weight:800;
+  }
+}
+
+
