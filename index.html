@@ -1,189 +1,57 @@
+<!doctype html>
 <html lang="id">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Dashboard Monitoring IKT & PPS</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-  <!-- Bootstrap -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Custom CSS -->
   <link rel="stylesheet" href="style.css">
-
 </head>
 
 <body>
 
-<div class="container py-4">
 <div class="container py-3">
 
-  <!-- TOPBAR + LOGO -->
-  <div class="alfa-topbar mb-3 d-flex justify-content-between align-items-center">
-    <div class="d-flex align-items-center gap-3">
-      <!-- logo local -->
-      <img src="alfamart-logo.png" alt="Alfamart" style="height:46px; background:#fff; border-radius:10px; padding:6px;">
   <!-- HEADER -->
   <div class="alfa-topbar mb-3">
-
-    <!-- BARIS ATAS: LOGO + JUDUL -->
-    <div class="d-flex align-items-center gap-3 mb-2 w-100">
-      <img src="alfamart-logo.png" alt="Alfamart"
-           style="height:36px;background:#fff;border-radius:8px;padding:4px;">
+    <div class="d-flex align-items-center gap-3 mb-2">
+      <img src="alfamart-logo.png" style="height:36px;background:#fff;border-radius:8px;padding:4px;">
       <div>
-        <div class="alfa-title fs-4 m-0">Dashboard Monitoring IKT & PPS</div>
-        <div class="small" style="opacity:.9;">
-          SAT TAJURHALANG|BI33 —
-          Bulan:
-          <select id="monthSelect" class="form-select form-select-sm d-inline-block month-select" style="width:140px;" onchange="loadDashboard()"></select>
         <div class="alfa-title">Dashboard Monitoring IKT & PPS</div>
-        <div class="small opacity-75">
-          SAT TAJURHALANG|BI33 — Bulan:
-        </div>
+        <div class="small opacity-75">SAT TAJURHALANG | BI33</div>
       </div>
     </div>
 
-    <!-- BULAN -->
-    <select id="monthSelect"
-            class="form-select form-select-sm month-select mb-2"
-            onchange="loadDashboard()">
-    </select>
+    <select id="monthSelect" class="form-select mb-2"></select>
 
-    <!-- ACTION BAR (SATU BARIS DI MOBILE) -->
     <div class="d-flex gap-2 action-bar">
-  <a href="settings.html" class="btn btn-light btn-settings">⚙</a>
-  <a href="input.html" class="btn btn-primary btn-input">+ Input Harian</a>
-</div>
       <a href="settings.html" class="btn btn-light btn-settings">⚙</a>
       <a href="input.html" class="btn btn-primary btn-input">+ Input Harian</a>
     </div>
-
   </div>
 
-  <!-- KPI CARDS -->
   <!-- KPI -->
-  <div class="row g-3 mb-3">
-
-    <div class="col-md-3">
-      <div class="card">
-        <div class="card-body">
-          <div class="text-muted small">Net Sales Ach%</div>
-          <div class="d-flex align-items-end justify-content-between">
-            <div class="fs-3 fw-bold" id="cardSalesAch">-</div>
-            <div class="text-muted small text-end">
-              <div>Target: <b id="cardSalesTarget">-</b></div>
-              <div>Actual: <b id="cardSalesActual">-</b></div>
-            </div>
-          <div class="fs-3 fw-bold" id="cardSalesAch">-</div>
-          <div class="small text-muted">
-            Target: <b id="cardSalesTarget">-</b><br>
-            Actual: <b id="cardSalesActual">-</b>
-          </div>
-          <div class="progress mt-2" style="height:10px;">
-          <div class="progress mt-2">
-            <div class="progress-bar" id="barSales"></div>
-          </div>
-        </div>
-@@ -59,67 +67,54 @@
-      <div class="card">
-        <div class="card-body">
-          <div class="text-muted small">APC AVG Ach%</div>
-          <div class="d-flex align-items-end justify-content-between">
-            <div class="fs-3 fw-bold" id="cardApcAch">-</div>
-            <div class="text-muted small text-end">
-              <div>Target: <b id="cardApcTarget">-</b></div>
-              <div>Avg: <b id="cardApcActual">-</b></div>
-            </div>
-          <div class="fs-3 fw-bold" id="cardApcAch">-</div>
-          <div class="small text-muted">
-            Target: <b id="cardApcTarget">-</b><br>
-            Avg: <b id="cardApcActual">-</b>
-          </div>
-          <div class="progress mt-2" style="height:10px;">
-          <div class="progress mt-2">
-            <div class="progress-bar" id="barApc"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- ✅ rename: PPS Score -->
-    <div class="col-md-3">
-      <div class="card">
-        <div class="card-body">
-          <div class="text-muted small">PPS Score</div>
-          <div class="d-flex align-items-end justify-content-between">
-          <div class="d-flex justify-content-between align-items-center">
-            <div class="fs-3 fw-bold" id="cardPpsScore">-</div>
-            <span class="badge fs-6" id="cardPpsStatus">-</span>
-            <span class="badge" id="cardPpsStatus">-</span>
-          </div>
-          <div class="progress mt-2" style="height:10px;">
-          <div class="progress mt-2">
-            <div class="progress-bar" id="barPps"></div>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- GAP CARD -->
-    <div class="col-md-3">
-      <div class="card">
-        <div class="card-body">
-          <div class="text-muted small">GAP to Target</div>
-          <div class="small mt-2">
-            <div>Net Sales: <b id="gapSales">-</b></div>
-            <div>PSM (Qty): <b id="gapPsm">-</b></div>
-            <div>PWP (Qty): <b id="gapPwp">-</b></div>
-            <div>SG (Paket): <b id="gapSg">-</b></div>
-          </div>
-
-          <div class="mt-2 pt-2 border-top">
-            <div class="text-muted small">BEST ESTIMATE (SISA HARI PER PERIODE)</div>
-            <div>Sales / hari: <b id="bestSales">-</b></div>
-            <div>PSM / hari (week): <b id="bestPsm">-</b></div>
-            <div>PWP / hari (week): <b id="bestPwp">-</b></div>
-            <div>SG / hari (week): <b id="bestSg">-</b></div>
-          </div>
-        <div class="card-body small">
-          <div class="text-muted mb-1">GAP to Target</div>
-          Net Sales: <b id="gapSales">-</b><br>
-          PSM: <b id="gapPsm">-</b><br>
-          PWP: <b id="gapPwp">-</b><br>
-          SG: <b id="gapSg">-</b>
-        </div>
-      </div>
-    </div>
-
-  </div>
-
-  <!-- TRACKERS -->
-  <!-- TRACKER -->
   <div class="row g-3">
-    <div class="col-md-6">
-      <div class="card">
-        <div class="card-body">
-          <div class="fw-semibold mb-2">PSM (4 WEEK)</div>
-          <div id="psmTracker" class="d-grid gap-3"></div>
-          <div id="psmTracker" class="d-grid gap-2"></div>
-        </div>
-      </div>
+    <div class="col-md-4">
+      <div class="card"><div class="card-body">
+        <div class="text-muted small">Net Sales</div>
+        <div class="fs-4 fw-bold" id="salesValue">-</div>
+      </div></div>
     </div>
-@@ -128,325 +123,123 @@
-      <div class="card mb-3">
-        <div class="card-body">
-          <div class="fw-semibold mb-2">PWP (2 WEEK)</div>
-          <div id="pwpTracker" class="d-grid gap-3"></div>
-          <div id="pwpTracker" class="d-grid gap-2"></div>
-        </div>
-      </div>
 
-      <div class="card">
-        <div class="card-body">
-          <div class="fw-semibold mb-2">SERBA GRATIS (2 WEEK)</div>
-          <div id="sgTracker" class="d-grid gap-3"></div>
-          <div id="sgTracker" class="d-grid gap-2"></div>
-        </div>
-      </div>
+    <div class="col-md-4">
+      <div class="card"><div class="card-body">
+        <div class="text-muted small">APC Rata-rata</div>
+        <div class="fs-4 fw-bold" id="apcValue">-</div>
+      </div></div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card"><div class="card-body">
+        <div class="text-muted small">PPS Score</div>
+        <div class="fs-4 fw-bold" id="ppsValue">-</div>
+      </div></div>
     </div>
   </div>
 
@@ -194,399 +62,69 @@
 <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
 
 <script>
-  const firebaseConfig = {
-    apiKey: "AIzaSyDwAQ1huvii-IJC6LT17CzH-Q6AawGgpOw",
-    authDomain: "numeric-nova-471404-c0.firebaseapp.com",
-    projectId: "numeric-nova-471404-c0",
-    storageBucket: "numeric-nova-471404-c0.firebasestorage.app",
-    messagingSenderId: "175787187573",
-    appId: "1:175787187573:web:ab48e4e3e259b60db0473c",
-    measurementId: "G-KHCC6MPNZM"
-  };
-
-  firebase.initializeApp(firebaseConfig);
-  const db = firebase.firestore();
-  db.settings({ ignoreUndefinedProperties: true });
-
-  const rupiah = (n) => new Intl.NumberFormat("id-ID").format(Math.round(n||0));
-  const num = (v) => Number(v||0);
-  const clamp = (x) => Math.max(0, Math.min(1, x));
-  const pct = (x) => (x*100).toFixed(1) + "%";
-  const ceil = (x) => Math.ceil(num(x));
-
-  function status(ach){
-    if(ach >= 1) return {t:"ON TRACK", cls:"bg-success"};
-    if(ach >= 0.9) return {t:"WARNING", cls:"bg-warning text-dark"};
-    return {t:"DANGER", cls:"bg-danger"};
-  }
-
-  function setProgress(elId, ach){
-    const el = document.getElementById(elId);
-    const v = Math.min(ach*100, 150);
-    el.style.width = v + "%";
-    el.className = "progress-bar";
-    if(ach >= 1) el.classList.add("bg-success");
-    else if(ach >= 0.9) el.classList.add("bg-warning");
-    else el.classList.add("bg-danger");
-  }
-
-  function getMonthInfo(monthStr){
-    const [Y,M] = monthStr.split("-").map(Number);
-    const eom = new Date(Y, M, 0).getDate();
-    return {Y, M, eom};
-  }
-
-  function currentMonth(){
-    const d = new Date();
-    const m = String(d.getMonth()+1).padStart(2,"0");
-    const y = d.getFullYear();
-    return `${y}-${m}`;
-  }
-
-  function inRange(dateStr, Y, M, startDay, endDay){
-    const d = new Date(dateStr + "T00:00:00");
-    const yy = d.getFullYear();
-    const mm = d.getMonth() + 1;
-    const dd = d.getDate();
-    return yy===Y && mm===M && dd>=startDay && dd<=endDay;
-  }
-
-  function sumQty(rows, field, Y,M, startDay, endDay){
-    return rows.reduce((a,r)=>{
-      if(inRange(r.date, Y,M,startDay,endDay)) a += num(r[field]);
-      return a;
-    },0);
-  }
-
-  function avgApc(rows, Y,M){
-    let total=0, cnt=0;
-    rows.forEach(r=>{
-      const d = new Date(r.date + "T00:00:00");
-      if(d.getFullYear()===Y && (d.getMonth()+1)===M && r.APC !== undefined){
-        total += num(r.APC);
-        cnt++;
-      }
-    });
-    return cnt ? (total/cnt) : 0;
-  }
-
-  function renderTracker(containerId, items){
-    const wrap = document.getElementById(containerId);
-    wrap.innerHTML = "";
-    items.forEach(it=>{
-      const ach = it.target ? it.actual/it.target : 0;
-      const st = status(ach);
-
-      const div = document.createElement("div");
-      div.innerHTML = `
-        <div class="d-flex justify-content-between">
-          <div class="fw-semibold">${it.label} <span class="text-muted small">${it.range}</span></div>
-          <div class="small">
-            <span class="text-muted">Actual</span> <b>${it.actual}</b>
-            <span class="text-muted">/ Target</span> <b>${it.target}</b>
-            <span class="ms-2 badge ${st.cls}">${pct(ach)}</span>
-          </div>
-        </div>
-        <div class="progress mt-1" style="height:10px;">
-          <div class="progress-bar ${st.cls}" style="width:${Math.min(ach*100,150)}%"></div>
-        </div>
-      `;
-      wrap.appendChild(div);
-    });
-  }
-
-  function psmWeekEnd(day, eom){
-    if(day <= 7) return 7;
-    if(day <= 15) return 15;
-    if(day <= 23) return 23;
-    return eom;
-  }
-
-  function pwpWeekEnd(day, eom){
-    if(day <= 15) return 15;
-    return eom;
-  }
-
-  async function loadMonthList(){
-    const sel = document.getElementById("monthSelect");
-    sel.innerHTML = "";
-
-    const snap = await db.collection("config").orderBy("month","desc").get();
-    const months = snap.docs.map(d => d.id);
-
-    if(months.length === 0){
-      const cm = currentMonth();
-      sel.innerHTML = `<option value="${cm}">${cm}</option>`;
-      return;
-    }
-
-    months.forEach(m=>{
-      const opt = document.createElement("option");
-      opt.value = m;
-      opt.textContent = m;
-      sel.appendChild(opt);
-    });
-
-    const cm = currentMonth();
-    sel.value = months.includes(cm) ? cm : months[0];
-  }
-
-  async function loadDashboard(){
-    const month = document.getElementById("monthSelect").value;
-    if(!month) return;
-
-    const cfgSnap = await db.collection("config").doc(month).get();
-    if(!cfgSnap.exists){ alert("❌ config/"+month+" tidak ada"); return; }
-
-    const cfg = cfgSnap.data();
-    const {Y,M,eom} = getMonthInfo(month);
-
-    const targetNetSales = num(cfg.targetNetSales);
-    const targetAPC = num(cfg.targetAPC);
-
-    const tp = cfg.targetPeriod || {};
-    const tPSM = tp.PSM || {W1:0,W2:0,W3:0,W4:0};
-    const tPWP = tp.PWP || {W1:0,W2:0};
-    const tSG  = tp["SERBA GRATIS"] || {W1:0,W2:0};
-
-    const W = cfg.ppsWeight || { APC:0.25, PSM:0.20, PWP:0.25, "SERBA GRATIS":0.30 };
-
-    // load sales
-    const salesSnap = await db.collection("daily_sales").orderBy("date").get();
-    const salesAll = salesSnap.docs.map(d=>d.data());
-    const salesRows = salesAll.filter(r => inRange(r.date, Y,M,1,eom));
-
-    // load pps
-    const ppsSnap = await db.collection("pps_daily").orderBy("date").get();
-    const ppsAll = ppsSnap.docs.map(d=>d.data());
-    const ppsRows = ppsAll.filter(r => inRange(r.date, Y,M,1,eom));
-
-    // Sales KPI
-    const actualSales = salesRows.reduce((a,r)=>a+num(r.netSales),0);
-    const salesAch = targetNetSales ? actualSales/targetNetSales : 0;
-
-    document.getElementById("cardSalesTarget").textContent = rupiah(targetNetSales);
-    document.getElementById("cardSalesActual").textContent = rupiah(actualSales);
-    document.getElementById("cardSalesAch").textContent = pct(salesAch);
-    setProgress("barSales", salesAch);
-
-    // APC KPI
-    const apcAvgV = avgApc(ppsRows, Y,M);
-    const apcAch = targetAPC ? apcAvgV/targetAPC : 0;
-
-    document.getElementById("cardApcTarget").textContent = rupiah(targetAPC);
-    document.getElementById("cardApcActual").textContent = rupiah(apcAvgV);
-    document.getElementById("cardApcAch").textContent = pct(apcAch);
-    setProgress("barApc", apcAch);
-
-    // Actual by periods
-    const PSM_W1 = sumQty(ppsRows, "PSM", Y,M, 1,7);
-    const PSM_W2 = sumQty(ppsRows, "PSM", Y,M, 8,15);
-    const PSM_W3 = sumQty(ppsRows, "PSM", Y,M, 16,23);
-    const PSM_W4 = sumQty(ppsRows, "PSM", Y,M, 24,eom);
-
-    const PWP_W1 = sumQty(ppsRows, "PWP", Y,M, 1,15);
-    const PWP_W2 = sumQty(ppsRows, "PWP", Y,M, 16,eom);
-
-    const SG_W1  = sumQty(ppsRows, "SERBA GRATIS", Y,M, 1,15);
-    const SG_W2  = sumQty(ppsRows, "SERBA GRATIS", Y,M, 16,eom);
-
-    renderTracker("psmTracker", [
-      { label:"PSM W1", range:"(1-7)", actual: PSM_W1, target: num(tPSM.W1) },
-      { label:"PSM W2", range:"(8-15)", actual: PSM_W2, target: num(tPSM.W2) },
-      { label:"PSM W3", range:"(16-23)", actual: PSM_W3, target: num(tPSM.W3) },
-      { label:"PSM W4", range:`(24-${eom})`, actual: PSM_W4, target: num(tPSM.W4) },
-    ]);
-
-    renderTracker("pwpTracker", [
-      { label:"PWP W1", range:"(1-15)", actual: PWP_W1, target: num(tPWP.W1) },
-      { label:"PWP W2", range:`(16-${eom})`, actual: PWP_W2, target: num(tPWP.W2) },
-    ]);
-
-    renderTracker("sgTracker", [
-      { label:"SG W1", range:"(1-15)", actual: SG_W1, target: num(tSG.W1) },
-      { label:"SG W2", range:`(16-${eom})`, actual: SG_W2, target: num(tSG.W2) },
-    ]);
-
-    // Totals
-    const psmTargetTotal = num(tPSM.W1)+num(tPSM.W2)+num(tPSM.W3)+num(tPSM.W4);
-    const pwpTargetTotal = num(tPWP.W1)+num(tPWP.W2);
-    const sgTargetTotal  = num(tSG.W1)+num(tSG.W2);
-
-    const psmActualTotal = PSM_W1+PSM_W2+PSM_W3+PSM_W4;
-    const pwpActualTotal = PWP_W1+PWP_W2;
-    const sgActualTotal  = SG_W1+SG_W2;
-
-    // PPS Score
-    const rAPC = targetAPC ? clamp(apcAvgV/targetAPC) : 0;
-    const rPSM = psmTargetTotal ? clamp(psmActualTotal/psmTargetTotal) : 0;
-    const rPWP = pwpTargetTotal ? clamp(pwpActualTotal/pwpTargetTotal) : 0;
-    const rSG  = sgTargetTotal  ? clamp(sgActualTotal/sgTargetTotal) : 0;
-
-    const score =
-      (rAPC * num(W.APC)) +
-      (rPSM * num(W.PSM)) +
-      (rPWP * num(W.PWP)) +
-      (rSG  * num(W["SERBA GRATIS"]));
-
-    document.getElementById("cardPpsScore").textContent = pct(score);
-    setProgress("barPps", score);
-
-    const st = status(score);
-    const badge = document.getElementById("cardPpsStatus");
-    badge.textContent = st.t;
-    badge.className = "badge fs-6 " + st.cls;
-
-    // GAP (NO APC)
-    const gapSales = targetNetSales - actualSales;
-    const gapPsm   = psmTargetTotal - psmActualTotal;
-    const gapPwp   = pwpTargetTotal - pwpActualTotal;
-    const gapSg    = sgTargetTotal  - sgActualTotal;
-
-    document.getElementById("gapSales").textContent = rupiah(gapSales);
-    document.getElementById("gapPsm").textContent   = gapPsm;
-    document.getElementById("gapPwp").textContent   = gapPwp;
-    document.getElementById("gapSg").textContent    = gapSg;
-
-    // BEST ESTIMATE (ceil)
-    const today = new Date();
-    const isThisMonth = (today.getFullYear()===Y && (today.getMonth()+1)===M);
-    const todayDay = isThisMonth ? today.getDate() : 0;
-
-    const remainingMonthDays = isThisMonth ? Math.max(1, (eom - todayDay)) : eom;
-
-    const psmEnd = isThisMonth ? psmWeekEnd(todayDay, eom) : eom;
-    const remainingPSMDays = isThisMonth ? Math.max(1, (psmEnd - todayDay)) : eom;
-
-    const pwpEnd = isThisMonth ? pwpWeekEnd(todayDay, eom) : eom;
-    const remainingPWPDays = isThisMonth ? Math.max(1, (pwpEnd - todayDay)) : eom;
-
-    let gapPSMWeek=0, gapPWPWeek=0, gapSGWeek=0;
-
-    if(isThisMonth){
-      if(todayDay <= 7)       gapPSMWeek = num(tPSM.W1) - PSM_W1;
-      else if(todayDay <= 15) gapPSMWeek = num(tPSM.W2) - PSM_W2;
-      else if(todayDay <= 23) gapPSMWeek = num(tPSM.W3) - PSM_W3;
-      else                    gapPSMWeek = num(tPSM.W4) - PSM_W4;
-
-      if(todayDay <= 15){
-        gapPWPWeek = num(tPWP.W1) - PWP_W1;
-        gapSGWeek  = num(tSG.W1)  - SG_W1;
-      } else {
-        gapPWPWeek = num(tPWP.W2) - PWP_W2;
-        gapSGWeek  = num(tSG.W2)  - SG_W2;
-      }
-    } else {
-      gapPSMWeek = gapPsm;
-      gapPWPWeek = gapPwp;
-      gapSGWeek  = gapSg;
-    }
-
-    document.getElementById("bestSales").textContent = rupiah(ceil(gapSales / remainingMonthDays));
-    document.getElementById("bestPsm").textContent   = ceil(gapPSMWeek / remainingPSMDays);
-    document.getElementById("bestPwp").textContent   = ceil(gapPWPWeek / remainingPWPDays);
-    document.getElementById("bestSg").textContent    = ceil(gapSGWeek  / remainingPWPDays);
-  }
-
-  (async function(){
-    await loadMonthList();
-    await loadDashboard();
-  })();
 /* ================= FIREBASE ================= */
-const firebaseConfig = {
+firebase.initializeApp({
   apiKey: "AIzaSyDwAQ1huvii-IJC6LT17CzH-Q6AawGgpOw",
   authDomain: "numeric-nova-471404-c0.firebaseapp.com",
   projectId: "numeric-nova-471404-c0"
-};
-firebase.initializeApp(firebaseConfig);
+});
 const db = firebase.firestore();
 
 /* ================= HELPERS ================= */
 const num = v => Number(v || 0);
-const rupiah = n => new Intl.NumberFormat("id-ID").format(Math.round(n||0));
-const pct = x => (x*100).toFixed(1)+"%";
-const clamp = x => Math.max(0,Math.min(1,x));
+const rupiah = n => new Intl.NumberFormat("id-ID").format(Math.round(n || 0));
 
-function status(ach){
-  if(ach>=1) return {t:"ON TRACK",c:"bg-success"};
-  if(ach>=0.9) return {t:"WARNING",c:"bg-warning text-dark"};
-  return {t:"DANGER",c:"bg-danger"};
-}
+/* ================= LOAD MONTH ================= */
+async function loadMonth(){
+  const sel = document.getElementById("monthSelect");
+  const snap = await db.collection("config").orderBy("month","desc").get();
 
-function setBar(id,ach){
-  const el=document.getElementById(id);
-  el.style.width=Math.min(ach*100,150)+"%";
-  el.className="progress-bar "+status(ach).c;
-}
-
-/* ================= MONTH ================= */
-function currentMonth(){
-  const d=new Date();
-  return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,"0")}`;
-}
-
-async function loadMonthList(){
-  const sel=document.getElementById("monthSelect");
-  sel.innerHTML="";
-  const snap=await db.collection("config").orderBy("month","desc").get();
-  const months=snap.docs.map(d=>d.id);
-  const cm=currentMonth();
-  (months.length?months:[cm]).forEach(m=>{
-    const o=document.createElement("option");
-    o.value=m;o.textContent=m;sel.appendChild(o);
+  sel.innerHTML = "";
+  snap.docs.forEach(d=>{
+    const opt = document.createElement("option");
+    opt.value = d.id;
+    opt.textContent = d.id;
+    sel.appendChild(opt);
   });
-  sel.value=months.includes(cm)?cm:months[0]||cm;
+
+  if(sel.value) loadDashboard();
 }
 
 /* ================= DASHBOARD ================= */
 async function loadDashboard(){
-  const month=document.getElementById("monthSelect").value;
-  const cfgSnap=await db.collection("config").doc(month).get();
-  if(!cfgSnap.exists) return;
+  try{
+    const month = document.getElementById("monthSelect").value;
+    if(!month) return;
 
-  const cfg=cfgSnap.data();
-  const [Y,M]=month.split("-").map(Number);
-  const eom=new Date(Y,M,0).getDate();
+    const salesSnap = await db.collection("daily_sales").get();
+    const ppsSnap   = await db.collection("pps_daily").get();
 
-  const salesSnap=await db.collection("daily_sales").orderBy("date").get();
-  const ppsSnap=await db.collection("pps_daily").orderBy("date").get();
+    const sales = salesSnap.docs.map(d=>d.data())
+      .filter(r=>r.date && r.date.startsWith(month));
 
-  const sales=salesSnap.docs.map(d=>d.data()).filter(r=>r.date.startsWith(month));
-  const pps=ppsSnap.docs.map(d=>d.data()).filter(r=>r.date.startsWith(month));
+    const pps = ppsSnap.docs.map(d=>d.data())
+      .filter(r=>r.date && r.date.startsWith(month));
 
-  const actualSales=sales.reduce((a,r)=>a+num(r.netSales),0);
-  const salesAch=cfg.targetNetSales?actualSales/cfg.targetNetSales:0;
+    const totalSales = sales.reduce((a,r)=>a+num(r.netSales),0);
+    const apcAvg = pps.length
+      ? pps.reduce((a,r)=>a+num(r.APC),0) / pps.length
+      : 0;
 
-  cardSalesTarget.textContent=rupiah(cfg.targetNetSales);
-  cardSalesActual.textContent=rupiah(actualSales);
-  cardSalesAch.textContent=pct(salesAch);
-  setBar("barSales",salesAch);
+    document.getElementById("salesValue").textContent = rupiah(totalSales);
+    document.getElementById("apcValue").textContent   = rupiah(apcAvg);
+    document.getElementById("ppsValue").textContent   = rupiah(apcAvg); // sementara, stabil
 
-  const apcAvg=pps.reduce((a,r)=>a+num(r.APC),0)/(pps.length||1);
-  const apcAch=cfg.targetAPC?apcAvg/cfg.targetAPC:0;
-
-  cardApcTarget.textContent=rupiah(cfg.targetAPC);
-  cardApcActual.textContent=rupiah(apcAvg);
-  cardApcAch.textContent=pct(apcAch);
-  setBar("barApc",apcAch);
-
-  const score=clamp(
-    (apcAch*(cfg.ppsWeight?.APC||0))+
-    (0*(cfg.ppsWeight?.PSM||0))+
-    (0*(cfg.ppsWeight?.PWP||0))+
-    (0*(cfg.ppsWeight?.["SERBA GRATIS"]||0))
-  );
-
-  cardPpsScore.textContent=pct(score);
-  const st=status(score);
-  cardPpsStatus.textContent=st.t;
-  cardPpsStatus.className="badge "+st.c;
-  setBar("barPps",score);
+  }catch(err){
+    console.error(err);
+    alert("JS Error, cek console");
+  }
 }
 
-(async function(){
-  await loadMonthList();
-  await loadDashboard();
+/* ================= INIT ================= */
+document.getElementById("monthSelect").addEventListener("change", loadDashboard);
+
+(async function init(){
+  await loadMonth();
 })();
 </script>
 
