@@ -175,3 +175,51 @@ body{
     margin:0 -8px;
   }
 }
+/* ===== FORCE FIX SETTINGS TEXT (MOBILE) ===== */
+@media (max-width:576px){
+
+  /* pastikan satu baris */
+  .action-bar{
+    display:flex !important;
+    align-items:center !important;
+    gap:10px !important;
+    width:100% !important;
+  }
+
+  /* tombol settings dipaksa icon-only */
+  .action-bar a.btn-settings{
+    width:48px !important;
+    height:48px !important;
+    min-width:48px !important;
+    padding:0 !important;
+    font-size:0 !important;          /* MATIKAN SEMUA TEKS */
+    line-height:0 !important;
+    overflow:hidden !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+  }
+
+  /* SEMBUNYIKAN SEMUA ISI DALAMNYA */
+  .action-bar a.btn-settings *{
+    display:none !important;
+  }
+
+  /* IKON SETTINGS */
+  .action-bar a.btn-settings::before{
+    content:"⚙" !important;
+    font-size:22px !important;
+    line-height:1 !important;
+    display:block !important;
+  }
+
+  /* tombol input tetap dominan */
+  .action-bar a.btn-input{
+    flex:1 !important;
+    padding:14px !important;
+    font-size:15px !important;
+    font-weight:800 !important;
+  }
+}
+
+
