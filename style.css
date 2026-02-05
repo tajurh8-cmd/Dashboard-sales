@@ -201,5 +201,52 @@ body{
     font-weight:800;
   }
 }
+/* ===== FINAL MOBILE ACTION BAR FIX ===== */
+@media (max-width:576px){
+
+  /* action bar tetap satu baris */
+  .action-bar{
+    display:grid !important;
+    grid-template-columns:48px 1fr !important;
+    gap:10px !important;
+    align-items:center;
+  }
+
+  /* SETTINGS: MATIKAN SEMUA TEKS */
+  .action-bar .btn-settings{
+    width:48px !important;
+    height:48px !important;
+    padding:0 !important;
+    font-size:0 !important;        /* KUNCI */
+    line-height:0 !important;
+    overflow:hidden !important;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+  }
+
+  /* HILANGKAN TEXT NODE & CHILD */
+  .action-bar .btn-settings *{
+    display:none !important;
+  }
+
+  /* IKON SETTINGS */
+  .action-bar .btn-settings::before{
+    content:"⚙";
+    font-size:22px;
+    line-height:1;
+    display:block;
+  }
+
+  /* INPUT HARIAN DOMINAN */
+  .action-bar .btn-input{
+    width:100%;
+    padding:14px;
+    font-size:15px;
+    font-weight:800;
+    border-radius:14px;
+  }
+}
+
 
 
