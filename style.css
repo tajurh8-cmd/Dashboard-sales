@@ -23,6 +23,28 @@ body{
   box-shadow:0 6px 14px rgba(0,0,0,.06);
 }
 
+/* ================= HEADER ================= */
+.alfa-topbar{
+  background:linear-gradient(90deg,var(--alfa-red),var(--alfa-red-2));
+  border-bottom:4px solid var(--alfa-yellow);
+  border-radius:18px;
+  padding:12px;
+  color:#fff;
+}
+
+/* title */
+.alfa-title{
+  font-weight:800;
+  font-size:18px;
+  line-height:1.2;
+}
+
+/* ================= FORM ================= */
+.form-control,
+.form-select{
+  border-radius:12px;
+}
+
 /* ================= BUTTON ================= */
 .btn-primary{
   background:var(--alfa-yellow) !important;
@@ -36,28 +58,6 @@ body{
   border:1px solid #ddd;
 }
 
-/* ================= HEADER ================= */
-.alfa-topbar{
-  background:linear-gradient(90deg,var(--alfa-red),var(--alfa-red-2));
-  border-bottom:4px solid var(--alfa-yellow);
-  border-radius:18px;
-  padding:12px;
-  color:#fff;
-  width:100%;
-}
-
-.alfa-title{
-  font-weight:800;
-  font-size:18px;
-  line-height:1.2;
-}
-
-/* ================= FORM ================= */
-.form-control,
-.form-select{
-  border-radius:12px;
-}
-
 /* ================= PROGRESS ================= */
 .progress{
   height:10px;
@@ -69,28 +69,7 @@ body{
   border-radius:999px;
 }
 
-/* ================= TABLE ================= */
-.table{
-  font-size:13px;
-}
-
-.table td,
-.table th{
-  white-space:nowrap;
-}
-
-/* ================= CTA PULSE ================= */
-.alfa-topbar .btn-primary{
-  animation:pulseCTA 1.8s infinite;
-}
-
-@keyframes pulseCTA{
-  0%{ box-shadow:0 0 0 0 rgba(255,210,0,.6); }
-  70%{ box-shadow:0 0 0 14px rgba(255,210,0,0); }
-  100%{ box-shadow:0 0 0 0 rgba(255,210,0,0); }
-}
-
-/* ================= MOBILE ================= */
+/* ================= MOBILE FINAL FIX ================= */
 @media (max-width:576px){
 
   body{
@@ -103,9 +82,9 @@ body{
     padding-right:10px;
   }
 
-  /* HEADER */
+  /* HEADER STACK */
   .alfa-topbar{
-    padding:12px;
+    display:block;
   }
 
   .alfa-topbar img{
@@ -119,107 +98,45 @@ body{
     font-size:16px;
   }
 
+  /* BULAN */
   #monthSelect{
     width:100% !important;
-    margin-bottom:10px;
+    margin:10px 0;
   }
 
-  /* ACTION BAR */
+  /* ===== ACTION BAR (SATU BARIS, TIDAK OVERLAP) ===== */
   .action-bar{
-    display:flex;
-    align-items:center;
+    display:grid !important;
+    grid-template-columns:48px 1fr;
     gap:10px;
     width:100%;
+    margin-top:6px;
   }
 
   /* SETTINGS ICON ONLY */
-  .btn-settings{
-    width:48px;
-    height:48px;
-    min-width:48px;
+  .action-bar .btn-settings{
+    width:48px !important;
+    height:48px !important;
     padding:0 !important;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    border-radius:12px;
-    overflow:hidden;
+    display:flex !important;
+    align-items:center !important;
+    justify-content:center !important;
+    font-size:20px !important;
+    border-radius:12px !important;
   }
 
-  .btn-settings *{
-    display:none;
-  }
-
-  .btn-settings::before{
-    content:"⚙";
-    font-size:22px;
-    line-height:1;
-  }
-
-  /* INPUT BUTTON */
-  .btn-input{
-    flex:1;
+  /* INPUT DOMINAN */
+  .action-bar .btn-input{
+    width:100%;
     padding:14px;
     font-size:15px;
     font-weight:800;
     border-radius:14px;
   }
 
-  /* GRID */
+  /* GRID KPI */
   .row.g-3 > [class*="col-"]{
     flex:0 0 100%;
     max-width:100%;
   }
-
-  /* TABLE */
-  .table-responsive{
-    margin:0 -8px;
-  }
 }
-/* ===== FORCE FIX SETTINGS TEXT (MOBILE) ===== */
-@media (max-width:576px){
-
-  /* pastikan satu baris */
-  .action-bar{
-    display:flex !important;
-    align-items:center !important;
-    gap:10px !important;
-    width:100% !important;
-  }
-
-  /* tombol settings dipaksa icon-only */
-  .action-bar a.btn-settings{
-    width:48px !important;
-    height:48px !important;
-    min-width:48px !important;
-    padding:0 !important;
-    font-size:0 !important;          /* MATIKAN SEMUA TEKS */
-    line-height:0 !important;
-    overflow:hidden !important;
-    display:flex !important;
-    align-items:center !important;
-    justify-content:center !important;
-  }
-
-  /* SEMBUNYIKAN SEMUA ISI DALAMNYA */
-  .action-bar a.btn-settings *{
-    display:none !important;
-  }
-
-  /* IKON SETTINGS */
-  .action-bar a.btn-settings::before{
-    content:"⚙" !important;
-    font-size:22px !important;
-    line-height:1 !important;
-    display:block !important;
-  }
-
-  /* tombol input tetap dominan */
-  .action-bar a.btn-input{
-    flex:1 !important;
-    padding:14px !important;
-    font-size:15px !important;
-    font-weight:800 !important;
-  }
-}
-
-
