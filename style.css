@@ -7,12 +7,17 @@
 }
 
 /* ================= BASE ================= */
+html, body{
+  overflow-x:hidden;
+}
+
 body{
   background:var(--alfa-bg);
   font-size:14px;
 }
 
 .container{
+  max-width:100%;
   padding-left:12px;
   padding-right:12px;
 }
@@ -28,21 +33,15 @@ body{
   background:linear-gradient(90deg,var(--alfa-red),var(--alfa-red-2));
   border-bottom:4px solid var(--alfa-yellow);
   border-radius:18px;
-  padding:12px;
+  padding:14px;
   color:#fff;
+  width:100%;
+  box-sizing:border-box;
 }
 
-/* title */
 .alfa-title{
   font-weight:800;
-  font-size:18px;
   line-height:1.2;
-}
-
-/* ================= FORM ================= */
-.form-control,
-.form-select{
-  border-radius:12px;
 }
 
 /* ================= BUTTON ================= */
@@ -69,117 +68,69 @@ body{
   border-radius:999px;
 }
 
-/* ================= MOBILE FINAL FIX ================= */
+/* ================= MOBILE FIX ================= */
 @media (max-width:576px){
 
   body{
     font-size:13px;
   }
 
-  .container{
-    max-width:100% !important;
-    padding-left:10px;
-    padding-right:10px;
-  }
-
-  /* HEADER STACK */
+  /* ❗ override bootstrap flex desktop */
   .alfa-topbar{
-    display:block;
+    display:block !important;
   }
 
+  /* logo */
   .alfa-topbar img{
-    height:32px;
+    height:36px;
     padding:4px;
     background:#fff;
     border-radius:8px;
   }
 
+  /* title */
   .alfa-title{
     font-size:16px;
   }
 
-  /* BULAN */
+  /* month */
   #monthSelect{
     width:100% !important;
-    margin:10px 0;
-  }
-
-  /* ===== ACTION BAR (SATU BARIS, TIDAK OVERLAP) ===== */
-  .action-bar{
-    display:grid !important;
-    grid-template-columns:48px 1fr;
-    gap:10px;
-    width:100%;
     margin-top:6px;
   }
 
-  /* SETTINGS ICON ONLY */
-  .action-bar .btn-settings{
-    width:48px !important;
-    height:48px !important;
-    padding:0 !important;
-    display:flex !important;
-    align-items:center !important;
-    justify-content:center !important;
-    font-size:20px !important;
-    border-radius:12px !important;
+  /* ACTION BAR: SATU BARIS */
+  .action-bar{
+    display:grid;
+    grid-template-columns:48px 1fr;
+    gap:10px;
+    width:100%;
+    margin-top:10px;
   }
 
-  /* INPUT DOMINAN */
-  .action-bar .btn-input{
-    width:100%;
+  /* settings icon */
+  .btn-settings{
+    width:48px;
+    height:48px;
+    padding:0;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:20px;
+    border-radius:12px;
+  }
+
+  /* input button */
+  .btn-input{
     padding:14px;
     font-size:15px;
     font-weight:800;
     border-radius:14px;
   }
 
-  /* GRID KPI */
+  /* KPI jadi 1 kolom */
   .row.g-3 > [class*="col-"]{
     flex:0 0 100%;
     max-width:100%;
   }
 }
-/* ===== MOBILE HARD RESET LAYOUT ===== */
-@media (max-width:576px){
-
-  html, body{
-    overflow-x:hidden !important;
-  }
-
-  .container{
-    max-width:100% !important;
-    width:100% !important;
-    margin:0 auto !important;
-    padding-left:10px !important;
-    padding-right:10px !important;
-  }
-
-  /* HEADER JANGAN LEBIH LEBAR DARI LAYAR */
-  .alfa-topbar{
-    width:100% !important;
-    max-width:100% !important;
-    margin:0 !important;
-    box-sizing:border-box !important;
-  }
-
-  /* SEMUA ROW JANGAN MAKLUM */
-  .row{
-    margin-left:0 !important;
-    margin-right:0 !important;
-  }
-
-  .row > *{
-    padding-left:0 !important;
-    padding-right:0 !important;
-  }
-
-  /* KPI PASTI 1 KOLOM */
-  .row.g-3 > [class*="col-"]{
-    width:100% !important;
-    max-width:100% !important;
-    flex:0 0 100% !important;
-  }
-}
-
-
