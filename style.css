@@ -140,3 +140,35 @@ body{
     margin:0 -8px;
   }
 }
+/* ===== CTA PULSE INPUT HARIAN ===== */
+.alfa-topbar .btn-primary{
+  background:#FFD200 !important;   /* kuning Alfamart */
+  color:#000 !important;
+  font-weight:700;
+  border:none;
+  box-shadow:0 0 0 rgba(255,210,0,.6);
+  animation:pulseCTA 1.8s infinite;
+}
+
+/* animasi denyut */
+@keyframes pulseCTA{
+  0%{
+    box-shadow:0 0 0 0 rgba(255,210,0,.7);
+  }
+  70%{
+    box-shadow:0 0 0 14px rgba(255,210,0,0);
+  }
+  100%{
+    box-shadow:0 0 0 0 rgba(255,210,0,0);
+  }
+}
+
+/* Mobile lebih tegas */
+@media (max-width:576px){
+  .alfa-topbar .btn-primary{
+    font-size:16px;
+    padding:14px;
+  }
+}
+
+
